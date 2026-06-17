@@ -65,6 +65,7 @@
       color: white;
     }
     nav .logo { font-size: 1.1rem; letter-spacing: .03em; }
+    .nav-logo-img { height: 42px; width: auto; display: block; }
     nav ul { list-style: none; display: flex; gap: 1.8rem; }
     nav a { color: rgba(255,255,255,.75); text-decoration: none; font-family: sans-serif; font-size: .85rem; }
     nav a:hover { color: white; }
@@ -87,6 +88,10 @@
       font-size: clamp(2rem, 5vw, 3.8rem);
       line-height: 1.15;
       margin-bottom: 1rem;
+    }
+    .hero-logo {
+      width: 220px; height: auto;
+      margin-bottom: 1.8rem;
     }
     #hero h1 em { color: #fdfcfa; font-style: italic; }
     #hero p {
@@ -260,7 +265,7 @@
 <body>
 
 <nav>
-  <div class="logo">Domek u Labe</div>
+  <img src="images/logo-white.png" alt="Domek u Labe" class="nav-logo-img" />
   <ul>
     <li><a href="#about">O domku</a></li>
     <li><a href="#gallery">Galerie</a></li>
@@ -271,6 +276,7 @@
 
 <!-- HERO -->
 <section id="hero">
+  <img src="images/logo-white.png" alt="Domek u Labe" class="hero-logo" />
   <h1>Váš odpočinek<br/>u <em>Labe</em></h1>
   <p>Útulný domek přímo na břehu řeky — koupání, kánoe, tiché rána s kávou a výhled na vodu.</p>
   <div class="hero-btns">
