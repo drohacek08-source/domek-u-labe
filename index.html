@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Domek u Labe</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* FLATPICKR THEME */
+    .flatpickr-calendar {
+      font-family: sans-serif;
+      border-radius: .9rem !important;
+      box-shadow: 0 8px 40px rgba(138,98,58,.18) !important;
+      border: none !important;
+      overflow: hidden;
+    }
+    .flatpickr-months { background: #8a623a; padding: .4rem 0; }
+    .flatpickr-month { color: white; fill: white; }
+    .flatpickr-current-month { color: white; font-size: 1rem; }
+    .flatpickr-current-month select { color: white; }
+    .flatpickr-prev-month svg, .flatpickr-next-month svg { fill: rgba(255,255,255,.7); }
+    .flatpickr-prev-month:hover svg, .flatpickr-next-month:hover svg { fill: white; }
+    .flatpickr-weekdays { background: #8a623a; }
+    span.flatpickr-weekday { color: #fdfcfa; font-size: .75rem; font-weight: 600; }
+    .flatpickr-day {
+      border-radius: .4rem !important;
+      font-family: sans-serif; font-size: .88rem;
+      color: #8a623a;
+    }
+    .flatpickr-day:hover { background: rgba(138,98,58,.08); border-color: transparent; }
+    .flatpickr-day.selected,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange {
+      background: #8a623a !important;
+      border-color: #8a623a !important;
+      color: white !important;
+    }
+    .flatpickr-day.inRange {
+      background: rgba(138,98,58,.08) !important;
+      border-color: transparent !important;
+      color: #8a623a;
+      box-shadow: none !important;
+    }
+    .flatpickr-day.today { border-color: #8a623a !important; color: #8a623a; font-weight: 600; }
+    .flatpickr-day.flatpickr-disabled { color: #ccc !important; }
+    .numInputWrapper span { border: none; }
+    .numInputWrapper span:hover { background: rgba(138,98,58,.1); }
+
+    body {
+      font-family: Georgia, serif;
+      color: #8a623a;
+      background: #fdfcfa;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 6%;
+      background: #8a623a;
+      color: white;
+    }
+    nav .logo { font-size: 1.1rem; letter-spacing: .03em; }
+    nav ul { list-style: none; display: flex; gap: 1.8rem; }
+    nav a { color: rgba(255,255,255,.75); text-decoration: none; font-family: sans-serif; font-size: .85rem; }
+    nav a:hover { color: white; }
+    nav .btn-nav {
+      background: #8a623a; color: white;
+      padding: .5rem 1.3rem; border-radius: 30px;
+      text-decoration: none; font-family: sans-serif; font-size: .85rem;
+    }
+
+    /* HERO */
+    #hero {
+      min-height: 90vh;
+      background: linear-gradient(160deg, #8a623a 0%, #8a623a 60%, #8a623a 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 4rem 6%;
+      color: white;
+    }
+    #hero h1 {
+      font-size: clamp(2rem, 5vw, 3.8rem);
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+    #hero h1 em { color: #fdfcfa; font-style: italic; }
+    #hero p {
+      font-family: sans-serif; font-weight: 300;
+      font-size: 1rem; color: rgba(255,255,255,.65);
+      max-width: 480px; margin-bottom: 2rem;
+    }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    .btn-primary {
+      background: #fdfcfa; color: #8a623a;
+      padding: .85rem 2rem; border-radius: 40px;
+      text-decoration: none; font-family: sans-serif;
+    }
+    .btn-outline {
+      border: 1.5px solid rgba(255,255,255,.4); color: white;
+      padding: .85rem 2rem; border-radius: 40px;
+      text-decoration: none; font-family: sans-serif;
+    }
+
+    /* SEKCE */
+    section { padding: 5rem 6%; }
+
+    h2 {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      line-height: 1.2; margin-bottom: 1rem;
+    }
+    .label {
+      display: inline-block;
+      font-family: sans-serif; font-size: .72rem;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: #8a623a; margin-bottom: .6rem;
+    }
+    p.lead {
+      font-family: sans-serif; font-weight: 300;
+      color: #8a623a; max-width: 520px; line-height: 1.8;
+    }
+
+    /* O DOMKU */
+    #about {
+      background: #fdfcfa;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+    .img-box {
+      aspect-ratio: 4/3; border-radius: 1rem;
+      background: linear-gradient(135deg, #8a623a, #8a623a);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,.3); font-family: sans-serif; font-size: .85rem;
+    }
+    .features {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: .7rem; margin-top: 1.8rem;
+    }
+    .feat {
+      background: white; border-radius: .75rem;
+      padding: .9rem 1rem;
+      font-family: sans-serif; font-size: .85rem;
+      display: flex; align-items: center; gap: .6rem;
+      border: 1px solid rgba(138,98,58,.12);
+    }
+
+    /* GALERIE - CAROUSEL */
+    #gallery { background: #8a623a; }
+    #gallery h2 { color: white; }
+    #gallery .label { color: #fdfcfa; }
+    .carousel {
+      position: relative;
+      margin-top: 2rem;
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+    .carousel-track {
+      display: flex;
+      transition: transform .45s ease;
+    }
+    .carousel-slide {
+      flex: 0 0 100%;
+      aspect-ratio: 16/9;
+    }
+    .carousel-slide img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+    .placeholder-slide {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #6b4a2c, #a87a4e);
+      color: rgba(255,255,255,.5); font-family: sans-serif; font-size: 1rem;
+    }
+    .carousel-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(255,255,255,.85); border: none;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 1.3rem; color: #2c2017;
+      transition: background .25s;
+    }
+    .carousel-btn:hover { background: white; }
+    .carousel-btn.prev { left: 14px; }
+    .carousel-btn.next { right: 14px; }
+    .carousel-dots {
+      display: flex; justify-content: center; gap: .5rem;
+      margin-top: 1rem;
+    }
+    .carousel-dot {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: rgba(255,255,255,.4); border: none; cursor: pointer;
+      padding: 0; transition: background .25s;
+    }
+    .carousel-dot.active { background: #fdfcfa; }
+
+    /* REZERVACE */
+    #rezervace { background: #8a623a; }
+    #rezervace h2 { color: white; }
+    #rezervace .label { color: #fdfcfa; }
+    #rezervace .lead { color: rgba(255,255,255,.5); }
+    .form-wrap {
+      background: white; border-radius: 1.2rem;
+      padding: 2.2rem; max-width: 600px; margin-top: 2rem;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .fgroup { margin-bottom: 1.1rem; }
+    .fgroup label {
+      display: block; font-family: sans-serif;
+      font-size: .75rem; color: #8a623a;
+      letter-spacing: .06em; text-transform: uppercase;
+      margin-bottom: .4rem;
+    }
+    .fgroup input, .fgroup select, .fgroup textarea {
+      width: 100%; padding: .7rem .9rem;
+      border: 1.5px solid rgba(138,98,58,.12); border-radius: .6rem;
+      font-family: sans-serif; font-size: .9rem;
+      background: #fdfcfa; color: #8a623a; outline: none;
+    }
+    .fgroup input:focus, .fgroup select:focus, .fgroup textarea:focus {
+      border-color: #8a623a;
+    }
+    .fgroup textarea { min-height: 80px; resize: vertical; }
+    .btn-submit {
+      width: 100%; padding: .95rem;
+      background: #8a623a; color: white;
+      border: none; border-radius: 40px;
+      font-family: sans-serif; font-size: .95rem;
+      cursor: pointer; margin-top: .3rem;
+    }
+    .btn-submit:hover { background: #8a623a; }
+
+    /* FOOTER */
+    footer {
+      background: #8a623a; color: rgba(255,255,255,.4);
+      padding: 2rem 6%;
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: sans-serif; font-size: .82rem; flex-wrap: wrap; gap: 1rem;
+    }
+    footer span { color: white; font-family: Georgia, serif; }
+
+    @media (max-width: 700px) {
+      #about { grid-template-columns: 1fr; gap: 2rem; }
+      .form-row { grid-template-columns: 1fr; }
+      nav ul { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Domek u Labe</div>
+  <ul>
+    <li><a href="#about">O domku</a></li>
+    <li><a href="#gallery">Galerie</a></li>
+    <li><a href="#rezervace">Rezervace</a></li>
+  </ul>
+  <a href="#rezervace" class="btn-nav">Rezervovat</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <h1>Váš odpočinek<br/>u <em>Labe</em></h1>
+  <p>Útulný domek přímo na břehu řeky — koupání, kánoe, tiché rána s kávou a výhled na vodu.</p>
+  <div class="hero-btns">
+    <a href="#rezervace" class="btn-primary">Zkontrolovat dostupnost</a>
+    <a href="#gallery" class="btn-outline">Prohlédnout galerii</a>
+  </div>
+</section>
+
+<!-- O DOMKU -->
+<section id="about">
+  <div>
+    <span class="label">O domku</span>
+    <h2>Místo, kde čas plyne jinak</h2>
+    <p class="lead">Prostorný dřevěný domek pro až 5 hostů, 50 m od Labe. Ideální pro rodiny, páry i přátele.</p>
+    <div class="features">
+      <div class="feat">🛶 Přístup k řece</div>
+      <div class="feat">🔥 Krb & ohniště</div>
+      <div class="feat">🚲 Cyklotrasy</div>
+      <div class="feat">🐾 Psi vítáni</div>
+      <div class="feat">📶 Wi-Fi zdarma</div>
+      <div class="feat">🅿️ Parkování</div>
+    </div>
+  </div>
+  <div class="img-box">📸 Vaše foto zde</div>
+</section>
+
+<!-- GALERIE -->
+<section id="gallery">
+  <span class="label">Galerie</span>
+  <h2 style="color:white">Podívejte se uvnitř</h2>
+  <div class="carousel" id="carousel">
+    <div class="carousel-track" id="carouselTrack">
+      <div class="carousel-slide"><img src="images/01-exterier.jpg" alt="Exteriér domku" /></div>
+      <div class="carousel-slide"><img src="images/02-zahrada.jpg" alt="Zahrada" /></div>
+      <div class="carousel-slide"><img src="images/03-obyvak.jpg" alt="Obývák" /></div>
+      <div class="carousel-slide"><img src="images/04-kuchyn-obyvak.jpg" alt="Kuchyň a obývák" /></div>
+      <div class="carousel-slide"><img src="images/05-kuchyn.jpg" alt="Kuchyň" /></div>
+      <div class="carousel-slide"><img src="images/06-schodiste.jpg" alt="Schodiště" /></div>
+      <div class="carousel-slide"><img src="images/07-koupelna1.jpg" alt="Koupelna" /></div>
+      <div class="carousel-slide"><img src="images/08-koupelna2.jpg" alt="Koupelna" /></div>
+      <div class="carousel-slide"><img src="images/09-loznice.jpg" alt="Ložnice" /></div>
+      <div class="carousel-slide"><img src="images/10-pokoj1.jpg" alt="Pokoj" /></div>
+      <div class="carousel-slide"><img src="images/11-pokoj1-v2.jpg" alt="Pokoj" /></div>
+      <div class="carousel-slide"><img src="images/12-pokoj2.jpg" alt="Pokoj" /></div>
+      <div class="carousel-slide"><img src="images/13-pokoj2-v2.jpg" alt="Pokoj" /></div>
+    </div>
+    <button class="carousel-btn prev" onclick="moveSlide(-1)" aria-label="Předchozí">‹</button>
+    <button class="carousel-btn next" onclick="moveSlide(1)" aria-label="Další">›</button>
+  </div>
+  <div class="carousel-dots" id="carouselDots"></div>
+</section>
+
+<!-- REZERVACE -->
+<section id="rezervace">
+  <span class="label">Rezervace</span>
+  <h2>Zarezervujte pobyt</h2>
+  <p class="lead">Napište nám — odpovíme do 2 hodin. Od <strong style="color:#fdfcfa">2 200 Kč / noc</strong>.</p>
+  <div class="form-wrap">
+    <form onsubmit="event.preventDefault(); alert('Poptávka odeslána! Brzy se ozveme.')">
+      <div class="form-row">
+        <div class="fgroup">
+          <label>Příjezd</label>
+          <input type="text" id="arrival" placeholder="Vyberte datum" readonly required />
+        </div>
+        <div class="fgroup">
+          <label>Odjezd</label>
+          <input type="text" id="departure" placeholder="Vyberte datum" readonly required />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="fgroup">
+          <label>Jméno</label>
+          <input type="text" placeholder="Jan Novák" required />
+        </div>
+        <div class="fgroup">
+          <label>E-mail</label>
+          <input type="email" placeholder="jan@email.cz" required />
+        </div>
+      </div>
+      <div class="fgroup">
+        <label>Zpráva</label>
+        <textarea placeholder="Počet hostů, přání, dotazy..."></textarea>
+      </div>
+      <button type="submit" class="btn-submit">Odeslat poptávku</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <span>Domek u Labe</span>
+  <div>info@domekuLabe.cz · +420 123 456 789</div>
+  <div>© 2025</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/l10n/cs.min.js"></script>
+<script>
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  const arrPicker = flatpickr("#arrival", {
+    locale: "cs",
+    dateFormat: "d. m. Y",
+    minDate: "today",
+    disableMobile: true,
+    onChange(selected) {
+      if (!selected[0]) return;
+      const minDep = new Date(selected[0]);
+      minDep.setDate(minDep.getDate() + 1);
+      depPicker.set("minDate", minDep);
+      if (depPicker.selectedDates[0] && depPicker.selectedDates[0] <= selected[0]) {
+        depPicker.setDate(minDep);
+      }
+    }
+  });
+
+  const depPicker = flatpickr("#departure", {
+    locale: "cs",
+    dateFormat: "d. m. Y",
+    minDate: new Date(today.getTime() + 86400000),
+    disableMobile: true,
+  });
+
+  // CAROUSEL
+  const track = document.getElementById('carouselTrack');
+  const dotsWrap = document.getElementById('carouselDots');
+  const slides = track.children;
+  let current = 0;
+
+  for (let i = 0; i < slides.length; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Foto ' + (i + 1));
+    dot.addEventListener('click', () => goToSlide(i));
+    dotsWrap.appendChild(dot);
+  }
+  const dots = dotsWrap.children;
+
+  function goToSlide(index) {
+    current = (index + slides.length) % slides.length;
+    track.style.transform = `translateX(-${current * 100}%)`;
+    for (let i = 0; i < dots.length; i++) {
+      dots[i].classList.toggle('active', i === current);
+    }
+  }
+
+  function moveSlide(dir) {
+    goToSlide(current + dir);
+  }
+
+  document.getElementById('carousel').addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') moveSlide(-1);
+    if (e.key === 'ArrowRight') moveSlide(1);
+  });
+
+  // swipe support
+  let touchStartX = 0;
+  track.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+  track.addEventListener('touchend', (e) => {
+    const diff = e.changedTouches[0].clientX - touchStartX;
+    if (diff > 50) moveSlide(-1);
+    if (diff < -50) moveSlide(1);
+  });
+</script>
+</body>
+</html>
