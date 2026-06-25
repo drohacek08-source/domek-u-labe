@@ -234,7 +234,13 @@
     #rezervace .lead { color: rgba(255,255,255,.5); }
     .form-wrap {
       background: white; border-radius: 1.2rem;
-      padding: 2.2rem; max-width: 600px; margin-top: 2rem;
+      padding: 2.2rem; max-width: 100%; margin-top: 2rem;
+    }
+    .form-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: start;
     }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .fgroup { margin-bottom: 1.1rem; }
@@ -261,7 +267,8 @@
       font-family: sans-serif; font-size: .95rem;
       cursor: pointer; margin-top: .3rem;
     }
-    .btn-submit:hover { background: #6b7c52; }
+    .btn-submit:hover { opacity: .9; }
+    @media (max-width: 700px) { .form-layout { grid-template-columns: 1fr; } }
 
     /* FOOTER */
     footer {
@@ -437,33 +444,41 @@
       <input type="hidden" name="subject" value="Nová poptávka rezervace – Domek u Labe">
       <input type="checkbox" name="botcheck" style="display:none;">
 
-      <div class="fgroup">
-        <label>Vyberte termín (příjezd – odjezd)</label>
-        <input type="text" id="date-picker" name="Vybraný_termín" placeholder="Klikněte pro výběr termínu" readonly required />
-        <div id="calendar-container" style="margin-top:.6rem;"></div>
-        <p style="font-family:sans-serif; font-size:.75rem; color:#888; margin-top:.5rem;">Šedé dny jsou již obsazené.</p>
-      </div>
+      <div class="form-layout">
+        <!-- Levý sloupec: kalendář -->
+        <div>
+          <div class="fgroup">
+            <label>Vyberte termín (příjezd – odjezd)</label>
+            <input type="text" id="date-picker" name="Vybraný_termín" placeholder="Klikněte pro výběr termínu" readonly required />
+            <div id="calendar-container" style="margin-top:.6rem;"></div>
+            <p style="font-family:sans-serif; font-size:.75rem; color:#888; margin-top:.5rem;">Šedé dny jsou již obsazené.</p>
+          </div>
+        </div>
 
-      <div class="form-row">
-        <div class="fgroup">
-          <label>Jméno a příjmení</label>
-          <input type="text" name="Jméno" placeholder="Jan Novák" required />
+        <!-- Pravý sloupec: kontaktní pole -->
+        <div>
+          <div class="form-row">
+            <div class="fgroup">
+              <label>Jméno a příjmení</label>
+              <input type="text" name="Jméno" placeholder="Jan Novák" required />
+            </div>
+            <div class="fgroup">
+              <label>E-mail</label>
+              <input type="email" name="Email" placeholder="jan@email.cz" required />
+            </div>
+          </div>
+          <div class="fgroup">
+            <label>Telefon</label>
+            <input type="tel" name="Telefon" placeholder="+420 123 456 789" />
+          </div>
+          <div class="fgroup">
+            <label>Poznámka (nepovinné)</label>
+            <textarea name="Poznámka" placeholder="Počet osob, dotazy..."></textarea>
+          </div>
+          <button type="submit" class="btn-submit">Odeslat poptávku</button>
+          <p id="form-status" style="text-align:center; margin-top:.8rem; font-family:sans-serif; font-size:.85rem; display:none;"></p>
         </div>
-        <div class="fgroup">
-          <label>E-mail</label>
-          <input type="email" name="Email" placeholder="jan@email.cz" required />
-        </div>
       </div>
-      <div class="fgroup">
-        <label>Telefon</label>
-        <input type="tel" name="Telefon" placeholder="+420 123 456 789" />
-      </div>
-      <div class="fgroup">
-        <label>Poznámka (nepovinné)</label>
-        <textarea name="Poznámka" placeholder="Počet osob, dotazy..."></textarea>
-      </div>
-      <button type="submit" class="btn-submit">Odeslat poptávku</button>
-      <p id="form-status" style="text-align:center; margin-top:.8rem; font-family:sans-serif; font-size:.85rem; display:none;"></p>
     </form>
   </div>
 </section>
