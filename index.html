@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Domek u Labe</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -39,15 +39,16 @@
       color: white !important;
     }
     .flatpickr-day.inRange {
-      background: rgba(107,124,82,.08) !important;
+      background: #d4e4b8 !important;
       border-color: transparent !important;
-      color: #6b7c52;
+      color: #3a4a2c;
       box-shadow: none !important;
     }
     .flatpickr-day.today { border-color: #6b7c52 !important; color: #6b7c52; font-weight: 600; }
     .flatpickr-day.flatpickr-disabled { color: #ccc !important; }
     .numInputWrapper span { border: none; }
     .numInputWrapper span:hover { background: rgba(107,124,82,.1); }
+    .flatpickr-calendar.inline { width: 100% !important; box-shadow: none !important; border: 1px solid #dde8d0 !important; border-radius: .75rem !important; }
 
     body {
       font-family: Georgia, serif;
@@ -426,36 +427,43 @@
 <section id="rezervace">
   <span class="label">Rezervace</span>
   <h2>Zarezervujte pobyt</h2>
-  <p class="lead">Napište nám — odpovíme co nejdříve. <strong style="color:#f7f8f3">4 990 Kč / noc</strong> · v létě preferujeme týdenní pobyty.</p>
+  <p class="lead">Nezávazná poptávka — odpovíme co nejdříve. <strong style="color:#f7f8f3">4 990 Kč / noc</strong> · v létě preferujeme týdenní pobyty.</p>
   <p class="lead" style="margin-top:.5rem; font-size:.85rem; color:rgba(255,255,255,.7)">✅ Volné termíny: <strong style="color:#f7f8f3">12. 7. – 1. 8. 2026</strong></p>
-  <p class="lead" style="margin-top:.5rem; font-size:.85rem;">Check-in od 15:00 · Check-out do 10:30 · Domácí zvířata nejsou povolena · Zákaz kouření v objektu</p>
+  <p class="lead" style="margin-top:.3rem; font-size:.82rem; color:rgba(255,255,255,.55);">Check-in od 15:00 · Check-out do 10:30 · Zákaz kouření · Domácí zvířata nejsou povolena</p>
+
   <div class="form-wrap">
-    <form onsubmit="event.preventDefault(); alert('Poptávka odeslána! Brzy se ozveme.')">
-      <div class="form-row">
-        <div class="fgroup">
-          <label>Příjezd</label>
-          <input type="text" id="arrival" placeholder="Vyberte datum" readonly required />
-        </div>
-        <div class="fgroup">
-          <label>Odjezd</label>
-          <input type="text" id="departure" placeholder="Vyberte datum" readonly required />
-        </div>
+    <form action="https://api.web3forms.com/submit" method="POST" id="booking-form" onsubmit="handleBookingSubmit(event)">
+      <input type="hidden" name="access_key" value="d4db60c0-baea-4c2d-b6ec-16f0e9cdea28">
+      <input type="hidden" name="subject" value="Nová poptávka rezervace – Domek u Labe">
+      <input type="checkbox" name="botcheck" style="display:none;">
+
+      <div class="fgroup">
+        <label>Vyberte termín (příjezd – odjezd)</label>
+        <input type="text" id="date-picker" name="Vybraný_termín" placeholder="Klikněte pro výběr termínu" readonly required />
+        <div id="calendar-container" style="margin-top:.6rem;"></div>
+        <p style="font-family:sans-serif; font-size:.75rem; color:#888; margin-top:.5rem;">Šedé dny jsou již obsazené.</p>
       </div>
+
       <div class="form-row">
         <div class="fgroup">
-          <label>Jméno</label>
-          <input type="text" placeholder="Jan Novák" required />
+          <label>Jméno a příjmení</label>
+          <input type="text" name="Jméno" placeholder="Jan Novák" required />
         </div>
         <div class="fgroup">
           <label>E-mail</label>
-          <input type="email" placeholder="jan@email.cz" required />
+          <input type="email" name="Email" placeholder="jan@email.cz" required />
         </div>
       </div>
       <div class="fgroup">
-        <label>Zpráva</label>
-        <textarea placeholder="Počet hostů, přání, dotazy..."></textarea>
+        <label>Telefon</label>
+        <input type="tel" name="Telefon" placeholder="+420 123 456 789" />
+      </div>
+      <div class="fgroup">
+        <label>Poznámka (nepovinné)</label>
+        <textarea name="Poznámka" placeholder="Počet osob, dotazy..."></textarea>
       </div>
       <button type="submit" class="btn-submit">Odeslat poptávku</button>
+      <p id="form-status" style="text-align:center; margin-top:.8rem; font-family:sans-serif; font-size:.85rem; display:none;"></p>
     </form>
   </div>
 </section>
@@ -499,36 +507,58 @@
   <div>Kozlovice ev.č. 25, 413 01 · © 2025</div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/l10n/cs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/cs.js"></script>
 <script>
-  const today = new Date();
-  today.setHours(0,0,0,0);
+  // ── FLATPICKR range kalendář ────────────────────────────
+  // ZDE doplňuješ/mažeš obsazené dny (formát RRRR-MM-DD nebo {from, to})
+  const obsazeneTerminy = [
+    { from: "2026-07-10", to: "2026-07-11" }
+  ];
 
-  const arrPicker = flatpickr("#arrival", {
+  flatpickr("#date-picker", {
+    inline: true,
+    appendTo: document.getElementById('calendar-container'),
+    mode: "range",
     locale: "cs",
-    dateFormat: "d. m. Y",
     minDate: "today",
-    disableMobile: true,
-    onChange(selected) {
-      if (!selected[0]) return;
-      const minDep = new Date(selected[0]);
-      minDep.setDate(minDep.getDate() + 1);
-      depPicker.set("minDate", minDep);
-      if (depPicker.selectedDates[0] && depPicker.selectedDates[0] <= selected[0]) {
-        depPicker.setDate(minDep);
-      }
+    dateFormat: "d. m. Y",
+    disable: obsazeneTerminy,
+    onReady(sel, str, instance) {
+      instance.calendarContainer.style.width = "100%";
     }
   });
 
-  const depPicker = flatpickr("#departure", {
-    locale: "cs",
-    dateFormat: "d. m. Y",
-    minDate: new Date(today.getTime() + 86400000),
-    disableMobile: true,
-  });
+  // ── Web3Forms odeslání ───────────────────────────────────
+  async function handleBookingSubmit(e) {
+    e.preventDefault();
+    const form = document.getElementById('booking-form');
+    const status = document.getElementById('form-status');
+    const btn = form.querySelector('.btn-submit');
 
-  // CAROUSEL
+    btn.textContent = 'Odesílám...';
+    btn.disabled = true;
+
+    const data = new FormData(form);
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST', body: data
+    });
+    const json = await res.json();
+
+    status.style.display = 'block';
+    if (json.success) {
+      status.style.color = '#4a7c3f';
+      status.textContent = '✅ Poptávka odeslána! Brzy se ozveme.';
+      form.reset();
+    } else {
+      status.style.color = '#c0392b';
+      status.textContent = '❌ Chyba odeslání. Zkuste to znovu nebo nás kontaktujte přímo.';
+    }
+    btn.textContent = 'Odeslat poptávku';
+    btn.disabled = false;
+  }
+
+  // ── CAROUSEL ─────────────────────────────────────────────
   const track = document.getElementById('carouselTrack');
   const dotsWrap = document.getElementById('carouselDots');
   const slides = track.children;
@@ -550,17 +580,13 @@
       dots[i].classList.toggle('active', i === current);
     }
   }
-
-  function moveSlide(dir) {
-    goToSlide(current + dir);
-  }
+  function moveSlide(dir) { goToSlide(current + dir); }
 
   document.getElementById('carousel').addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') moveSlide(-1);
     if (e.key === 'ArrowRight') moveSlide(1);
   });
 
-  // swipe support
   let touchStartX = 0;
   track.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
   track.addEventListener('touchend', (e) => {
