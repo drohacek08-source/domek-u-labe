@@ -299,6 +299,55 @@
     }
     footer span { color: white; font-family: Georgia, serif; }
 
+    /* PROVOZNÍ ŘÁD */
+    .provozni-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .provozni-skupina {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      border: 1px solid #e2e8d8;
+    }
+    .provozni-skupina h3 {
+      font-family: Georgia, serif;
+      font-size: 1rem;
+      color: #6b7c52;
+      margin-bottom: .9rem;
+    }
+    .provozni-skupina ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .provozni-skupina li {
+      font-family: sans-serif;
+      font-size: .85rem;
+      color: #445;
+      padding-left: 1rem;
+      position: relative;
+      line-height: 1.5;
+    }
+    .provozni-skupina li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: #6b7c52;
+    }
+    .btn-download {
+      display: inline-flex; align-items: center; gap: .5rem;
+      margin-top: 1.5rem;
+      padding: .75rem 1.6rem;
+      background: #6b7c52; color: white;
+      border-radius: 40px; text-decoration: none;
+      font-family: sans-serif; font-size: .9rem; font-weight: 500;
+      transition: opacity .25s;
+    }
+    .btn-download:hover { opacity: .85; }
+
     /* KONTAKT */
     #kontakt { background: #f7f8f3; padding: 5rem 6%; }
     #kontakt h2 { margin-bottom: .5rem; }
@@ -349,6 +398,7 @@
     <li><a href="#gallery">Galerie</a></li>
     <li><a href="#location">Poloha</a></li>
     <li><a href="#kontakt">Kontakt</a></li>
+    <li><a href="#provozni-rad">Provozní řád</a></li>
     <li><a href="#rezervace">Rezervace</a></li>
   </ul>
   <div style="display:flex;align-items:center;gap:.8rem;">
@@ -455,6 +505,7 @@
   <span class="label">Rezervace</span>
   <h2>Zarezervujte pobyt</h2>
   <p class="lead">Nezávazná poptávka — odpovíme co nejdříve. <strong style="color:#f7f8f3">3 990 Kč / noc</strong></p>
+  <p class="lead" style="margin-top:.5rem;">Účtujeme poplatek za úklid <strong style="color:#f7f8f3">2 000 Kč</strong> za pobyt.</p>
   <p class="lead" style="margin-top:.5rem;">v létě preferujeme týdenní pobyty.</p>
   <p class="lead" style="margin-top:.3rem; font-size:.82rem; color:rgba(255,255,255,.55);">Check-in od 15:00 · Check-out do 10:30 · Zákaz kouření · Domácí zvířata nejsou povolena</p>
 
@@ -534,6 +585,60 @@
       <span class="kontakt-value">Domek u Labe</span>
     </a>
   </div>
+</section>
+
+<!-- PROVOZNÍ ŘÁD -->
+<section id="provozni-rad" style="background:#f7f8f3; padding:5rem 6%;">
+  <span class="label">Provozní řád</span>
+  <h2 style="margin-bottom:1.5rem;">Pravidla pobytu</h2>
+  <div class="provozni-grid">
+    <div class="provozni-skupina">
+      <h3>🏠 Příjezd & odjezd</h3>
+      <ul>
+        <li>Check-in: 15:00–18:00 (po domluvě jinak)</li>
+        <li>Check-out: do 10:30 (po domluvě jinak)</li>
+        <li>Při příjezdu předloží host platný doklad totožnosti</li>
+        <li>Záloha min. 50 % při rezervaci, zbytek převodem nebo hotově na místě</li>
+        <li>Poplatek za úklid: 2 000 Kč za pobyt</li>
+      </ul>
+    </div>
+    <div class="provozni-skupina">
+      <h3>📋 Pravidla v objektu</h3>
+      <ul>
+        <li>Zákaz kouření v celém objektu (kouření pouze venku)</li>
+        <li>Pobyt s domácími mazlíčky není povolen</li>
+        <li>Noční klid: 22:00–7:00</li>
+        <li>Nejsou povoleny rozlučky se svobodou ani akce podobného typu</li>
+        <li>Objekt mohou využívat pouze smluvně ubytované osoby</li>
+        <li>Venkovní voda není pitná (pochází z vrtu)</li>
+      </ul>
+    </div>
+    <div class="provozni-skupina">
+      <h3>⚠️ Odpovědnost & škody</h3>
+      <ul>
+        <li>Případné závady oznamte ihned při příjezdu</li>
+        <li>Škody způsobené hostem budou účtovány v plné výši</li>
+        <li>Nesmí se přemísťovat nábytek ani zasahovat do instalací</li>
+        <li>Vlastní elektrospotřebiče nejsou povoleny (kromě hygienických a dětských chůviček)</li>
+        <li>Za děti ručí jejich zákonný zástupce</li>
+      </ul>
+    </div>
+    <div class="provozni-skupina">
+      <h3>🔑 Před odjezdem</h3>
+      <ul>
+        <li>Zkontrolujte zavřenou vodu, zhasnutá světla, vypnuté spotřebiče</li>
+        <li>Zavřená okna a zamknuté dveře</li>
+        <li>Uhraďte úklid 2 000 Kč (hotově nebo převodem)</li>
+        <li>Ztráta klíčů nebo ovládání vrat bude účtována</li>
+      </ul>
+    </div>
+  </div>
+  <p style="font-family:sans-serif; font-size:.82rem; color:#888; margin-top:2rem; max-width:760px;">
+    Odesláním poptávky a složením zálohy host potvrzuje, že jsou mu známy všechny podmínky pobytu a v plném rozsahu je přijímá. Přejeme příjemný pobyt!
+  </p>
+  <a href="provozni-rad.pdf" download class="btn-download">
+    📄 Stáhnout provozní řád (PDF)
+  </a>
 </section>
 
 <footer>
