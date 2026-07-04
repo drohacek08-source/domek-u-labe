@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Domek u Labe</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="64x64" href="images/favicon-64.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon-180.png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -504,9 +507,9 @@
 <section id="rezervace">
   <span class="label">Rezervace</span>
   <h2>Zarezervujte pobyt</h2>
-  <p class="lead">Nezávazná poptávka — odpovíme co nejdříve. <strong style="color:#f7f8f3">3 990 Kč / noc.</strong></p>
+  <p class="lead">Nezávazná poptávka — odpovíme co nejdříve. <strong style="color:#f7f8f3">3 990 Kč / noc</strong></p>
   <p class="lead" style="margin-top:.5rem;">Účtujeme poplatek za úklid <strong style="color:#f7f8f3">2 000 Kč</strong> za pobyt.</p>
-  <p class="lead" style="margin-top:.5rem;">V létě preferujeme týdenní pobyty.</p>
+  <p class="lead" style="margin-top:.5rem;">v létě preferujeme týdenní pobyty.</p>
   <p class="lead" style="margin-top:.3rem; font-size:.82rem; color:rgba(255,255,255,.55);">Check-in od 15:00 · Check-out do 10:30 · Zákaz kouření · Domácí zvířata nejsou povolena</p>
 
   <div class="form-wrap">
@@ -664,9 +667,7 @@
   //   { from: "2026-08-10", to: "2026-08-17" }
   // ];
   // ════════════════════════════════════════════════════════
-  const obsazeneTerminy = [
-    { from: "2026-07-05", to: "2026-07-11" }
-  ];
+  const obsazeneTerminy = [];
 
   flatpickr("#date-picker", {
     inline: true,
