@@ -680,7 +680,7 @@
     dateFormat: "d. m. Y",
     disable: obsazeneTerminy,
     onDayCreate(dObj, dStr, fp, dayElem) {
-      const date = dayElem.dateObj;
+      const d = dayElem.dateObj;
       const dateStr = d.getFullYear() + '-' +
   String(d.getMonth() + 1).padStart(2, '0') + '-' +
   String(d.getDate()).padStart(2, '0');
