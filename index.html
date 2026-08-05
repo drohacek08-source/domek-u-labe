@@ -681,7 +681,9 @@
     disable: obsazeneTerminy,
     onDayCreate(dObj, dStr, fp, dayElem) {
       const date = dayElem.dateObj;
-      const dateStr = date.toISOString().split('T')[0];
+      const dateStr = d.getFullYear() + '-' +
+  String(d.getMonth() + 1).padStart(2, '0') + '-' +
+  String(d.getDate()).padStart(2, '0');
       // Check if this date falls within any booked range
       const isBooked = obsazeneTerminy.some(t => {
         if (typeof t === 'string') return dateStr === t;
